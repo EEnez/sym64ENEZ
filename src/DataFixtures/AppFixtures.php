@@ -25,6 +25,8 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
+        $users = [];
+
         // Admin user
         $admin = new User();
         $admin->setUsername('admin')
@@ -35,6 +37,7 @@ class AppFixtures extends Fixture
             ->setUniqid(uniqid())
             ->setIsActive(true);
         $manager->persist($admin);
+        $users[] = $admin;
 
         // Redac users
         for ($i = 1; $i <= 5; $i++) {
@@ -47,6 +50,7 @@ class AppFixtures extends Fixture
                 ->setUniqid(uniqid())
                 ->setIsActive(true);
             $manager->persist($redac);
+            $users[] = $redac;
         }
 
         // Regular users
@@ -62,10 +66,11 @@ class AppFixtures extends Fixture
                 // Set 3 out of 4 users as active
                 ->setIsActive($i % 4 !== 0);
             $manager->persist($user);
+            $users[] = $user;
         }
 
-        $admins = $manager->getRepository(User::class)->findByRole('ROLE_ADMIN');
-        $redacs = $manager->getRepository(User::class)->findByRole('ROLE_REDAC');
+        $admins = [$admin];
+        $redacs = array_slice($users, 1, 5);
         $allAuthors = array_merge($admins, $redacs);
 
         for ($i = 0; $i < 160; $i++) {
@@ -84,6 +89,9 @@ class AppFixtures extends Fixture
                     $faker->dateTimeBetween($article->getCreatedAt())
                 );
             }
+
+            // Randomly assign a user to each article
+            $article->setUser($users[array_rand($users)]);
 
             $manager->persist($article);
         }
