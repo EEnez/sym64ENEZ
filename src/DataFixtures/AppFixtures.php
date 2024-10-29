@@ -9,6 +9,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Faker\Factory;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\Article;
+use App\Entity\Section;
 
 class AppFixtures extends Fixture
 {
@@ -24,6 +25,19 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+
+        // Create sections first
+        $sections = [];
+        for ($i = 0; $i < 6; $i++) {
+            $section = new Section();
+            $title = $faker->unique()->words(3, true);
+            $section->setSectionTitle($title)
+                ->setSectionSlug($this->slugger->slug($title))
+                ->setSectionDetail($faker->paragraph());
+            
+            $manager->persist($section);
+            $sections[] = $section;
+        }
 
         $users = [];
 
@@ -83,7 +97,12 @@ class AppFixtures extends Fixture
                 ->setCreatedAt($faker->dateTimeBetween('-6 months'))
                 ->setAuthor($faker->randomElement($allAuthors));
 
-            // 75% de chance d'être publié
+            $numSections = $faker->numberBetween(2, 40);
+            $randomSections = $faker->randomElements($sections, $numSections);
+            foreach ($randomSections as $section) {
+                $article->addSection($section);
+            }
+            
             if ($faker->boolean(75)) {
                 $article->setPublishedAt(
                     $faker->dateTimeBetween($article->getCreatedAt())
