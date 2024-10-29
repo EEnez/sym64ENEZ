@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Section;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -36,8 +39,13 @@ class Article
     #[ORM\Column(type: 'boolean')]
     private bool $published = false;
 
+    #[ORM\ManyToMany(targetEntity: Section::class)]
+    #[ORM\JoinTable(name: 'article_section')]
+    private Collection $sections;
+
     public function __construct()
     {
+        $this->sections = new ArrayCollection();
         $this->articleDateCreate = new \DateTime();
     }
 
@@ -120,6 +128,29 @@ class Article
     public function setPublished(bool $published): static
     {
         $this->published = $published;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Section>
+     */
+    public function getSections(): Collection
+    {
+        return $this->sections;
+    }
+
+    public function addSection(Section $section): self
+    {
+        if (!$this->sections->contains($section)) {
+            $this->sections->add($section);
+        }
+
+        return $this;
+    }
+
+    public function removeSection(Section $section): self
+    {
+        $this->sections->removeElement($section);
         return $this;
     }
 }
