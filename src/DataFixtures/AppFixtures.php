@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Faker\Factory;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Entity\Article;
 
 class AppFixtures extends Fixture
 {
@@ -61,6 +62,30 @@ class AppFixtures extends Fixture
                 // Set 3 out of 4 users as active
                 ->setIsActive($i % 4 !== 0);
             $manager->persist($user);
+        }
+
+        $admins = $manager->getRepository(User::class)->findByRole('ROLE_ADMIN');
+        $redacs = $manager->getRepository(User::class)->findByRole('ROLE_REDAC');
+        $allAuthors = array_merge($admins, $redacs);
+
+        for ($i = 0; $i < 160; $i++) {
+            $article = new Article();
+            $title = $faker->sentence(6);
+            
+            $article->setTitle($title)
+                ->setTitleSlug($this->slugger->slug($title))
+                ->setText($faker->paragraphs(5, true))
+                ->setCreatedAt($faker->dateTimeBetween('-6 months'))
+                ->setAuthor($faker->randomElement($allAuthors));
+
+            // 75% de chance d'être publié
+            if ($faker->boolean(75)) {
+                $article->setPublishedAt(
+                    $faker->dateTimeBetween($article->getCreatedAt())
+                );
+            }
+
+            $manager->persist($article);
         }
 
         $manager->flush();

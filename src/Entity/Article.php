@@ -43,6 +43,9 @@ class Article
     #[ORM\JoinTable(name: 'article_section')]
     private Collection $sections;
 
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $createdAt = null;
+
     public function __construct()
     {
         $this->sections = new ArrayCollection();
@@ -151,6 +154,17 @@ class Article
     public function removeSection(Section $section): self
     {
         $this->sections->removeElement($section);
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 }
