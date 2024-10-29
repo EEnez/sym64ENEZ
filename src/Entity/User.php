@@ -40,8 +40,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private ?bool $activate = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $activate = false;
 
     public function getId(): ?int
     {
@@ -154,7 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isActivate(): ?bool
+    public function isActivate(): bool
     {
         return $this->activate;
     }

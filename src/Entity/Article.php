@@ -11,36 +11,49 @@ class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
     private ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     #[ORM\Column(length: 160)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 162)]
+    #[ORM\Column(length: 162, unique: true)]
     private ?string $titleSlug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $articleDateCreate = null;
+    private ?\DateTimeInterface $articleDateCreate;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $articleDatePosted = null;
 
-    #[ORM\Column]
-    private ?bool $published = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $published = false;
+
+    public function __construct()
+    {
+        $this->articleDateCreate = new \DateTime();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getUser(): ?User
     {
-        $this->id = $id;
+        return $this->user;
+    }
 
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 
@@ -52,7 +65,6 @@ class Article
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -64,7 +76,6 @@ class Article
     public function setTitleSlug(string $titleSlug): static
     {
         $this->titleSlug = $titleSlug;
-
         return $this;
     }
 
@@ -76,7 +87,6 @@ class Article
     public function setText(string $text): static
     {
         $this->text = $text;
-
         return $this;
     }
 
@@ -88,7 +98,6 @@ class Article
     public function setArticleDateCreate(\DateTimeInterface $articleDateCreate): static
     {
         $this->articleDateCreate = $articleDateCreate;
-
         return $this;
     }
 
@@ -100,11 +109,10 @@ class Article
     public function setArticleDatePosted(?\DateTimeInterface $articleDatePosted): static
     {
         $this->articleDatePosted = $articleDatePosted;
-
         return $this;
     }
 
-    public function isPublished(): ?bool
+    public function isPublished(): bool
     {
         return $this->published;
     }
@@ -112,7 +120,6 @@ class Article
     public function setPublished(bool $published): static
     {
         $this->published = $published;
-
         return $this;
     }
 }
