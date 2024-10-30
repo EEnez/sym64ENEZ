@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Articles{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Mes Articles</h1>
+            <a href="{{ path('redac_article_new') }}" class="btn btn-primary">Créer un article</a>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Créé le</th>
+                    <th>Statut</th>
+                    <th>Sections</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.createdAt|date('d/m/Y H:i') }}</td>
+                        <td>
+                            {% if article.published %}
+                                <span class="badge bg-success">
+                                    Publié le {{ article.publishedAt|date('d/m/Y') }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning">Brouillon</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for section in article.sections %}
+                                <span class="badge bg-secondary">{{ section.sectionTitle }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{{ path('redac_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                            <a href="{{ path('redac_article_edit', {id: article.id}) }}" class="btn btn-sm btn-warning">Éditer</a>
+                            <form method="post" action="{{ path('redac_article_delete', {id: article.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                <button class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">Aucun article trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %} 

@@ -1,0 +1,32 @@
+{{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_label(form.title, 'Titre') }}
+        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.title) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.sections, 'Sections') }}
+        {{ form_widget(form.sections, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.sections) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.text, 'Contenu') }}
+        {{ form_widget(form.text, {'attr': {'class': 'form-control', 'rows': 15}}) }}
+        {{ form_errors(form.text) }}
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check">
+            {{ form_widget(form.published, {'attr': {'class': 'form-check-input'}}) }}
+            {{ form_label(form.published, 'Publier l\'article', {'label_attr': {'class': 'form-check-label'}}) }}
+        </div>
+        {{ form_errors(form.published) }}
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+        <a href="{{ path('redac_dashboard') }}" class="btn btn-secondary">Retour</a>
+    </div>
+{{ form_end(form) }} 

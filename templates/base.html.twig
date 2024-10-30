@@ -11,7 +11,51 @@
         {% endblock %}
     </head>
     <body>
-        {% include 'partials/_nav.html.twig' %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+            <div class="container">
+                <a class="navbar-brand" href="{{ path('app_home') }}">Blog</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                        </li>
+                        {% for section in sections %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                                    {{ section.sectionTitle }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        {% if is_granted('ROLE_REDAC') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('redac_dashboard') }}">Espace Rédacteur</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin_dashboard') }}">Administration</a>
+                            </li>
+                        {% endif %}
+                        {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
         <div class="container mt-4">
             {% block body %}{% endblock %}
         </div>
