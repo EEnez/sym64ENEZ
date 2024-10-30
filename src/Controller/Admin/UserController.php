@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\ArticleRepository;
 
 #[Route('/admin/user')]
 class UserController extends AbstractController
@@ -93,5 +94,23 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_user_index');
+    }
+
+    #[Route('/{id}/articles', name: 'admin_user_articles', methods: ['GET'])]
+    public function userArticles(
+        User $user, 
+        ArticleRepository $articleRepository
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        $articles = $articleRepository->findBy(
+            ['author' => $user],
+            ['createdAt' => 'DESC']
+        );
+        
+        return $this->render('admin/user/articles.html.twig', [
+            'user' => $user,
+            'articles' => $articles
+        ]);
     }
 } 

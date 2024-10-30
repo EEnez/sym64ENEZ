@@ -24,7 +24,8 @@
                         <p class="card-text">{{ article.text|excerpt(200) }}</p>
                         <div class="text-muted small">
                             {{ article.publishedAt|date('d/m/Y') }} | 
-                            {{ article.author.fullname }}
+                            <a href="{{ path('app_author', {id: article.author.id}) }}" 
+                               class="text-decoration-none">{{ article.author.fullname }}</a>
                         </div>
                     </div>
                 </div>

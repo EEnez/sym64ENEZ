@@ -7,6 +7,7 @@ use App\Repository\SectionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\User;
 
 class HomeController extends AbstractController
 {
@@ -53,6 +54,23 @@ class HomeController extends AbstractController
         return $this->render('article/show.html.twig', [
             'article' => $article,
             'relatedArticles' => $articleRepository->findRelatedArticles($article)
+        ]);
+    }
+
+    #[Route('/auteur/{id}', name: 'app_author')]
+    public function author(
+        User $user,
+        ArticleRepository $articleRepository
+    ): Response {
+        // Ne récupérer que les articles publiés de l'auteur
+        $articles = $articleRepository->findBy(
+            ['author' => $user, 'published' => true],
+            ['publishedAt' => 'DESC']
+        );
+
+        return $this->render('home/author.html.twig', [
+            'author' => $user,
+            'articles' => $articles
         ]);
     }
 } 

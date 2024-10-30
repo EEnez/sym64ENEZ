@@ -6,9 +6,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Administration</h1>
         <div>
-            <a href="{{ path('admin_article_new') }}" class="btn btn-primary">Create New Article</a>
-            <a href="{{ path('admin_section_new') }}" class="btn btn-success">Create New Section</a>
-            <a href="{{ path('admin_user_index') }}" class="btn btn-primary mb-3">Gestion des utilisateurs</a>
+            <a href="{{ path('admin_article_new') }}" class="btn btn-primary">Créer un article</a>
+            <a href="{{ path('admin_section_new') }}" class="btn btn-success">Créer une section</a>
+            <a href="{{ path('admin_user_index') }}" class="btn btn-info">Gestion utilisateurs</a>
         </div>
     </div>
 
@@ -16,7 +16,7 @@
     <table class="table mb-5">
         <thead>
             <tr>
-                <th>Title</th>
+                <th>Titre</th>
                 <th>Slug</th>
                 <th>Actions</th>
             </tr>
@@ -50,15 +50,20 @@
             {% for article in articles %}
                 <tr>
                     <td>{{ article.title }}</td>
-                    <td>{{ article.author.fullname }}</td>
-                    <td>{{ article.createdAt|date('Y-m-d H:i') }}</td>
-                    <td>{{ article.publishedAt ? article.publishedAt|date('Y-m-d H:i') : 'Not published' }}</td>
                     <td>
-                        <a href="{{ path('admin_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Show</a>
-                        <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                        <a href="{{ path('admin_user_articles', {id: article.author.id}) }}" 
+                           class="text-decoration-none">
+                            {{ article.author.fullname }}
+                        </a>
+                    </td>
+                    <td>{{ article.createdAt|date('Y-m-d H:i') }}</td>
+                    <td>{{ article.publishedAt ? article.publishedAt|date('Y-m-d H:i') : 'Non publié' }}</td>
+                    <td>
+                        <a href="{{ path('admin_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                        <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-sm btn-warning">Éditer</a>
+                        <form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
-                            <button class="btn btn-sm btn-danger">Delete</button>
+                            <button class="btn btn-sm btn-danger">Supprimer</button>
                         </form>
                     </td>
                 </tr>

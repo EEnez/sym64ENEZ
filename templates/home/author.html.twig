@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles de {{ author.fullname }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="author-header mb-5">
+            <h1>Articles de {{ author.fullname }}</h1>
+            {% if articles|length > 0 %}
+                <p class="text-muted">{{ articles|length }} article{% if articles|length > 1 %}s{% endif %} publié{% if articles|length > 1 %}s{% endif %}</p>
+            {% endif %}
+        </div>
+
+        {% if articles is not empty %}
+            <div class="row">
+                {% for article in articles %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                                       class="text-decoration-none">
+                                        {{ article.title }}
+                                    </a>
+                                </h5>
+                                <div class="card-text mb-3">
+                                    {{ article.text|excerpt(200) }}
+                                </div>
+                                <div class="metadata text-muted small">
+                                    <div>Publié le {{ article.publishedAt|date('d/m/Y') }}</div>
+                                    <div>
+                                        {% for section in article.sections %}
+                                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}" 
+                                               class="badge bg-secondary text-decoration-none">
+                                                {{ section.sectionTitle }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Aucun article publié pour le moment.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %} 

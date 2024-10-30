@@ -24,10 +24,10 @@
                     <td>{{ section.sectionSlug }}</td>
                     <td>{{ section.sectionDetail|excerpt(50) }}</td>
                     <td>
-                        <a href="{{ path('admin_section_edit', {id: section.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ path('admin_section_edit', {id: section.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
                         <form method="post" action="{{ path('admin_section_delete', {id: section.id}) }}" class="d-inline" onsubmit="return confirm('Are you sure?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ section.id) }}">
-                            <button class="btn btn-sm btn-danger">Delete</button>
+                            <button class="btn btn-sm btn-danger">Supprimer</button>
                         </form>
                     </td>
                 </tr>

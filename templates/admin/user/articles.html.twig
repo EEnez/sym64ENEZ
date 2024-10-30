@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles de {{ user.fullname }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Articles de {{ user.fullname }}</h1>
+            <div>
+                <a href="{{ path('admin_user_show', {id: user.id}) }}" class="btn btn-info">Profil</a>
+                <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">Retour</a>
+            </div>
+        </div>
+
+        {% if articles is not empty %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Créé le</th>
+                        <th>Statut</th>
+                        <th>Sections</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                        <tr>
+                            <td>{{ article.title }}</td>
+                            <td>{{ article.createdAt|date('d/m/Y H:i') }}</td>
+                            <td>
+                                {% if article.published %}
+                                    <span class="badge bg-success">
+                                        Publié le {{ article.publishedAt|date('d/m/Y') }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">Non publié</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for section in article.sections %}
+                                    <span class="badge bg-secondary">{{ section.sectionTitle }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                                <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-sm btn-warning">Éditer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info">
+                Cet utilisateur n'a pas encore écrit d'articles.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %} 
