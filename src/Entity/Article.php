@@ -119,9 +119,14 @@ class Article
         return $this->published;
     }
 
-    public function setPublished(bool $published): static
+    public function setPublished(bool $published): self
     {
         $this->published = $published;
+        if ($published && $this->publishedAt === null) {
+            $this->publishedAt = new \DateTime();
+        } elseif (!$published) {
+            $this->publishedAt = null;
+        }
         return $this;
     }
 

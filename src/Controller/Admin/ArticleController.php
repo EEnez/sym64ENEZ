@@ -68,4 +68,14 @@ class ArticleController extends AbstractController
 
         return $this->redirectToRoute('admin_dashboard');
     }
+
+    #[Route('/{id}', name: 'admin_article_show', methods: ['GET'])]
+    public function show(Article $article): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        return $this->render('admin/article/show.html.twig', [
+            'article' => $article
+        ]);
+    }
 } 

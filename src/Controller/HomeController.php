@@ -41,14 +41,18 @@ class HomeController extends AbstractController
         string $slug,
         ArticleRepository $articleRepository
     ): Response {
-        $article = $articleRepository->findOneBy(['titleSlug' => $slug]);
+        $article = $articleRepository->findOneBy([
+            'titleSlug' => $slug,
+            'published' => true
+        ]);
 
         if (!$article) {
-            throw $this->createNotFoundException('Article not found');
+            throw $this->createNotFoundException('Article non trouvé');
         }
 
-        return $this->render('home/article.html.twig', [
+        return $this->render('article/show.html.twig', [
             'article' => $article,
+            'relatedArticles' => $articleRepository->findRelatedArticles($article)
         ]);
     }
 } 

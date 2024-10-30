@@ -20,7 +20,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
         $admin = new User();
         $admin->setUsername('admin')
@@ -59,46 +59,91 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-        // Create 6 sections
+     
+        $sectionsData = [
+            'Actualités' => 'L\'essentiel de l\'actualité nationale et internationale',
+            'Technologie' => 'Découvrez les dernières innovations et tendances technologiques',
+            'Culture' => 'Art, littérature, cinéma et spectacles vivants',
+            'Sciences' => 'Explorez les avancées scientifiques et les découvertes',
+            'Économie' => 'Analyses et décryptages de l\'actualité économique',
+            'Sport' => 'Toute l\'actualité sportive et les résultats en direct'
+        ];
+
         $sections = [];
-        for ($i = 0; $i < 6; $i++) {
+        foreach ($sectionsData as $title => $detail) {
             $section = new Section();
-            $title = $faker->unique()->word();
             $section->setSectionTitle($title)
                    ->setSectionSlug($this->slugger->slug($title)->lower())
-                   ->setSectionDetail($faker->sentence());
-            
+                   ->setSectionDetail($detail);
             $manager->persist($section);
             $sections[] = $section;
         }
 
-        // Create 2-40 articles for each section
-        foreach ($sections as $section) {
-            $numArticles = rand(2, 40);
-            for ($i = 0; $i < $numArticles; $i++) {
-                $article = new Article();
-                $title = $faker->sentence();
-                
-                $randomUser = $users[array_rand($users)];
-                if (!$randomUser instanceof User) {
-                    throw new \RuntimeException('Invalid user selected');
-                }
+        $articles = [];
+        $totalArticles = 0;
 
+        
+        foreach ($sections as $section) {
+       
+            for ($i = 0; $i < 2; $i++) {
+                $article = new Article();
+                $title = $faker->realText(60);
+                
                 $article->setTitle($title)
                        ->setTitleSlug($this->slugger->slug($title)->lower())
-                       ->setText($faker->paragraphs(rand(3, 6), true))
+                       ->setText($faker->realText(1500))
                        ->setCreatedAt($faker->dateTimeBetween('-6 months'))
-                       ->setAuthor($randomUser)
+                       ->setAuthor($users[array_rand($users)])
                        ->addSection($section);
                 
                 if ($faker->boolean(75)) {
-                    $article->setPublishedAt(
-                        $faker->dateTimeBetween($article->getCreatedAt())
-                    );
+                    $publishedAt = $faker->dateTimeBetween($article->getCreatedAt());
+                    $article->setPublishedAt($publishedAt)
+                           ->setPublished(true);
                 }
 
                 $manager->persist($article);
+                $articles[] = $article;
+                $totalArticles++;
             }
+        }
+
+    
+        while ($totalArticles < 160) {
+            $section = $faker->randomElement($sections);
+            
+          
+            $sectionArticleCount = 0;
+            foreach ($articles as $existingArticle) {
+                if ($existingArticle->getSections()->contains($section)) {
+                    $sectionArticleCount++;
+                }
+            }
+            
+           
+            if ($sectionArticleCount >= 40) {
+                continue;
+            }
+
+            $article = new Article();
+            $title = $faker->realText(60);
+            
+            $article->setTitle($title)
+                   ->setTitleSlug($this->slugger->slug($title)->lower())
+                   ->setText($faker->realText(1500))
+                   ->setCreatedAt($faker->dateTimeBetween('-6 months'))
+                   ->setAuthor($users[array_rand($users)])
+                   ->addSection($section);
+            
+            if ($faker->boolean(75)) {
+                $publishedAt = $faker->dateTimeBetween($article->getCreatedAt());
+                $article->setPublishedAt($publishedAt)
+                       ->setPublished(true);
+            }
+
+            $manager->persist($article);
+            $articles[] = $article;
+            $totalArticles++;
         }
 
         $manager->flush();

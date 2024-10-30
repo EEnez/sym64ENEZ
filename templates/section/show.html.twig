@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ section.sectionTitle }}{% endblock %}
+
+{% block body %}
+    <div class="section-header mb-5">
+        <h1>{{ section.sectionTitle }}</h1>
+        {% if section.sectionDetail %}
+            <div class="lead">{{ section.sectionDetail }}</div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for article in articles %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                               class="text-decoration-none">
+                                {{ article.title }}
+                            </a>
+                        </h5>
+                        <p class="card-text">{{ article.text|excerpt(200) }}</p>
+                        <div class="text-muted small">
+                            {{ article.publishedAt|date('d/m/Y') }} | 
+                            {{ article.author.fullname }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col">
+                <p>Aucun article dans cette section pour le moment.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Pagination if needed #}
+{% endblock %} 

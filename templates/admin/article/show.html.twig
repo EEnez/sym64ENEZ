@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article: {{ article.title }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Article Details</h1>
+            <div>
+                <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-warning">Edit</a>
+                <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">{{ article.title }}</h2>
+                
+                <dl class="row mt-4">
+                    <dt class="col-sm-3">Slug</dt>
+                    <dd class="col-sm-9">{{ article.titleSlug }}</dd>
+
+                    <dt class="col-sm-3">Auteur</dt>
+                    <dd class="col-sm-9">{{ article.author.fullname }}</dd>
+
+                    <dt class="col-sm-3">Sections</dt>
+                    <dd class="col-sm-9">
+                        {% for section in article.sections %}
+                            <span class="badge bg-secondary">{{ section.sectionTitle }}</span>
+                        {% endfor %}
+                    </dd>
+
+                    <dt class="col-sm-3">Créé le</dt>
+                    <dd class="col-sm-9">{{ article.createdAt|date('d/m/Y H:i') }}</dd>
+
+                    <dt class="col-sm-3">Statut</dt>
+                    <dd class="col-sm-9">
+                        {% if article.published %}
+                            <span class="badge bg-success">Publié</span>
+                            <br>le {{ article.publishedAt|date('d/m/Y H:i') }}
+                        {% else %}
+                            <span class="badge bg-warning">Brouillon</span>
+                        {% endif %}
+                    </dd>
+
+                    <dt class="col-sm-3">Contenu</dt>
+                    <dd class="col-sm-9">
+                        <div class="card">
+                            <div class="card-body">
+                                {{ article.text|nl2br }}
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

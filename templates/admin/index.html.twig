@@ -26,7 +26,7 @@
                     <td>{{ section.sectionTitle }}</td>
                     <td>{{ section.sectionSlug }}</td>
                     <td>
-                        <a href="{{ path('admin_section_edit', {id: section.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ path('admin_section_edit', {id: section.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -38,10 +38,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Created At</th>
-                <th>Published At</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Créé le</th>
+                <th>Publié le</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -53,6 +53,7 @@
                     <td>{{ article.createdAt|date('Y-m-d H:i') }}</td>
                     <td>{{ article.publishedAt ? article.publishedAt|date('Y-m-d H:i') : 'Not published' }}</td>
                     <td>
+                        <a href="{{ path('admin_article_show', {id: article.id}) }}" class="btn btn-sm btn-info">Show</a>
                         <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" class="d-inline" onsubmit="return confirm('Are you sure?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">

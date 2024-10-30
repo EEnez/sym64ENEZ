@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-    <h1>Latest Articles</h1>
+    <h1>Derniers articles</h1>
     
     {% for article in articles %}
         <article class="mb-4">
@@ -24,7 +24,7 @@
             </div>
             <p>{{ article.text|excerpt(300) }}</p>
             <a href="{{ path('app_article', {slug: article.titleSlug}) }}" class="btn btn-primary">
-                Read more
+                Lire la suite
             </a>
         </article>
     {% endfor %}
