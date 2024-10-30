@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles de {{ author.fullname }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Articles de {{ author.fullname }}</h1>
+
+        {% if articles is empty %}
+            <p>Aucun article publié pour le moment.</p>
+        {% else %}
+            {% for article in articles %}
+                <article class="mb-4">
+                    <h2>
+                        <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                           class="text-decoration-none">{{ article.title }}</a>
+                    </h2>
+                    <div class="metadata">
+                        <small>
+                            Publié le {{ article.publishedAt|date('d/m/Y') }}
+                            {% if article.sections|length > 0 %}
+                                dans
+                                {% for section in article.sections %}
+                                    <a href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                                        {{ section.sectionTitle }}
+                                    </a>
+                                    {%- if not loop.last %}, {% endif -%}
+                                {% endfor %}
+                            {% endif %}
+                        </small>
+                    </div>
+                    <p>{{ article.text|excerpt(300) }}</p>
+                    <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                       class="btn btn-primary">Lire la suite</a>
+                </article>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %} 

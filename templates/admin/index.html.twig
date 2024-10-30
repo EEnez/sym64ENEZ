@@ -52,9 +52,7 @@
                     <td>{{ article.title }}</td>
                     <td>
                         <a href="{{ path('admin_user_articles', {id: article.author.id}) }}" 
-                           class="text-decoration-none">
-                            {{ article.author.fullname }}
-                        </a>
+                           class="text-decoration-none">{{ article.author.fullname }}</a>
                     </td>
                     <td>{{ article.createdAt|date('Y-m-d H:i') }}</td>
                     <td>{{ article.publishedAt ? article.publishedAt|date('Y-m-d H:i') : 'Non publié' }}</td>

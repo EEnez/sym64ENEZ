@@ -31,7 +31,10 @@
                     <dd class="col-sm-9">{{ article.titleSlug }}</dd>
 
                     <dt class="col-sm-3">Auteur</dt>
-                    <dd class="col-sm-9">{{ article.author.fullname }}</dd>
+                    <dd class="col-sm-9">
+                        <a href="{{ path('admin_user_articles', {id: article.author.id}) }}" 
+                           class="text-decoration-none">{{ article.author.fullname }}</a>
+                    </dd>
 
                     <dt class="col-sm-3">Sections</dt>
                     <dd class="col-sm-9">

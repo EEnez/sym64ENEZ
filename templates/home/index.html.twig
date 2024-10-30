@@ -16,9 +16,8 @@
                     {% if article.sections|length > 0 %}
                         dans
                         {% for section in article.sections %}
-                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}">
-                                {{ section.sectionTitle }}
-                            </a>
+                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}"
+                               class="text-decoration-none">{{ section.sectionTitle }}</a>
                             {%- if not loop.last %}, {% endif -%}
                         {% endfor %}
                     {% endif %}

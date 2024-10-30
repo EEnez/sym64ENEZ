@@ -25,7 +25,10 @@
                     <tr>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.fullname }}</td>
+                        <td>
+                            <a href="{{ path('admin_user_show', {id: user.id}) }}" 
+                               class="text-decoration-none">{{ user.fullname }}</a>
+                        </td>
                         <td>
                             {% for role in user.roles %}
                                 <span class="badge bg-secondary">{{ role }}</span>
