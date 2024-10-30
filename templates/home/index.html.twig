@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <h1>Latest Articles</h1>
+    
+    {% for article in articles %}
+        <article class="mb-4">
+            <h2>{{ article.title }}</h2>
+            <div class="metadata">
+                <small>
+                    By {{ article.author.fullname }} on {{ article.publishedAt|date('F j, Y') }}
+                    {% if article.sections|length > 0 %}
+                        in
+                        {% for section in article.sections %}
+                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                                {{ section.sectionTitle }}
+                            </a>
+                            {%- if not loop.last %}, {% endif -%}
+                        {% endfor %}
+                    {% endif %}
+                </small>
+            </div>
+            <p>{{ article.text|excerpt(300) }}</p>
+            <a href="{{ path('app_article', {slug: article.titleSlug}) }}" class="btn btn-primary">
+                Read more
+            </a>
+        </article>
+    {% endfor %}
+{% endblock %} 

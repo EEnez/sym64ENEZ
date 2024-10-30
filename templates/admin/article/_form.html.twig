@@ -1,0 +1,37 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+    <div class="mb-3">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.title) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.text) }}
+        {{ form_widget(form.text, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+        {{ form_errors(form.text) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.sections) }}
+        <div class="row">
+            {% for section in form.sections %}
+                <div class="col-md-4">
+                    <div class="form-check">
+                        {{ form_widget(section, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(section, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {{ form_errors(form.sections) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.publishedAt) }}
+        {{ form_widget(form.publishedAt, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.publishedAt) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">Back to list</a>
+{{ form_end(form) }} 

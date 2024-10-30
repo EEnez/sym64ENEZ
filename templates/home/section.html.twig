@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ section.sectionTitle }}{% endblock %}
+
+{% block body %}
+    <h1>{{ section.sectionTitle }}</h1>
+    
+    {% if section.sectionDetail %}
+        <div class="section-detail mb-4">
+            {{ section.sectionDetail }}
+        </div>
+    {% endif %}
+    
+    {% for article in articles %}
+        <article class="mb-4">
+            <h2>{{ article.title }}</h2>
+            <div class="metadata">
+                <small>
+                    By {{ article.author.fullname }} on {{ article.publishedAt|date('F j, Y') }}
+                    {% if article.sections|length > 0 %}
+                        in
+                        {% for section in article.sections %}
+                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                                {{ section.sectionTitle }}
+                            </a>
+                            {%- if not loop.last %}, {% endif -%}
+                        {% endfor %}
+                    {% endif %}
+                </small>
+            </div>
+            <p>{{ article.text|excerpt(200) }}</p>
+            <a href="{{ path('app_article', {slug: article.titleSlug}) }}" class="btn btn-primary">
+                Read more
+            </a>
+        </article>
+    {% endfor %}
+{% endblock %} 
