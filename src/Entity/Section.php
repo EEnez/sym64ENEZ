@@ -10,16 +10,16 @@ class Section
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     private ?string $sectionTitle = null;
 
-    #[ORM\Column(length: 105, unique: true)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $sectionSlug = null;
 
-    #[ORM\Column(length: 500, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $sectionDetail = null;
 
     public function getId(): ?int

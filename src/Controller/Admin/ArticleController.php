@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
@@ -11,20 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin')]
-class AdminController extends AbstractController
+#[Route('/admin/article')]
+class ArticleController extends AbstractController
 {
-    #[Route('/', name: 'admin_dashboard')]
-    public function index(ArticleRepository $articleRepository): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
-        return $this->render('admin/index.html.twig', [
-            'articles' => $articleRepository->findBy([], ['createdAt' => 'DESC'])
-        ]);
-    }
-
-    #[Route('/article/new', name: 'admin_article_new')]
+    #[Route('/new', name: 'admin_article_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -47,7 +37,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/article/{id}/edit', name: 'admin_article_edit')]
+    #[Route('/{id}/edit', name: 'admin_article_edit')]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -66,7 +56,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/article/{id}/delete', name: 'admin_article_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'admin_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');

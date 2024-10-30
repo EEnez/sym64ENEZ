@@ -12,4 +12,12 @@ class SectionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Section::class);
     }
+
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->orderBy('s.sectionTitle', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 } 

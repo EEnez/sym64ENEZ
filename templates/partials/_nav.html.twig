@@ -6,27 +6,39 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                {% for section in get_all_sections() %}
+                {# Debug output #}
+                {% set sections = get_all_sections() %}
+                {% if sections is empty %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
-                            {{ section.sectionTitle }}
-                        </a>
+                        <span class="nav-link">No sections found</span>
                     </li>
-                {% endfor %}
+                {% else %}
+                    {% for section in sections %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                                {{ section.sectionTitle }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
             <ul class="navbar-nav">
                 {% if app.user %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_dashboard') }}">Administration</a>
+                            <a class="nav-link {% if app.request.get('_route') starts with 'admin_' %}active{% endif %}" 
+                               href="{{ path('admin_dashboard') }}">Administration</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            Logout ({{ app.user.username }})
+                        </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                        <a class="nav-link {% if app.request.get('_route') == 'app_login' %}active{% endif %}" 
+                           href="{{ path('app_login') }}">Login</a>
                     </li>
                 {% endif %}
             </ul>
