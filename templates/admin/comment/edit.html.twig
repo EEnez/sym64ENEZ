@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le commentaire{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h3 mb-4">Modifier le commentaire</h1>
+                        
+                        <dl class="row mb-4">
+                            <dt class="col-sm-3">Auteur</dt>
+                            <dd class="col-sm-9">{{ comment.author.fullname }}</dd>
+                            
+                            <dt class="col-sm-3">Article</dt>
+                            <dd class="col-sm-9">{{ comment.article.title }}</dd>
+                            
+                            <dt class="col-sm-3">Date</dt>
+                            <dd class="col-sm-9">{{ comment.createdAt|date('d/m/Y H:i') }}</dd>
+                        </dl>
+
+                        {{ form_start(form) }}
+                            <div class="mb-3">
+                                {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.content) }}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <a href="{{ path('app_article', {slug: comment.article.titleSlug}) }}" 
+                               class="btn btn-secondary">Retour</a>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

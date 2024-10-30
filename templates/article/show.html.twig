@@ -45,9 +45,27 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h5 class="card-title">{{ comment.author.fullname }}</h5>
-                                <small class="text-muted">
-                                    {{ comment.createdAt|date('d/m/Y H:i') }}
-                                </small>
+                                <div>
+                                    <small class="text-muted">
+                                        {{ comment.createdAt|date('d/m/Y H:i') }}
+                                    </small>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <div class="btn-group btn-group-sm ms-2">
+                                            <a href="{{ path('admin_comment_edit', {id: comment.id}) }}" 
+                                               class="btn btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{{ path('admin_comment_delete', {id: comment.id}) }}" 
+                                                  class="d-inline" 
+                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                                <button class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                             <p class="card-text">{{ comment.content|nl2br }}</p>
                         </div>
