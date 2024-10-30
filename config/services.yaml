@@ -27,3 +27,7 @@ services:
         arguments:
             $sectionRepository: '@App\Repository\SectionRepository'
         tags: ['twig.extension']
+
+    App\Service\EmailService:
+        arguments:
+            $mailFrom: '%env(MAIL_FROM)%'

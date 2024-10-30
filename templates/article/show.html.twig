@@ -3,56 +3,59 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
-    <article class="mb-5">
-        <header class="mb-4">
+    <div class="container">
+        <article class="mb-5">
             <h1>{{ article.title }}</h1>
-            <div class="text-muted mb-2">
-                Par <a href="{{ path('app_author', {id: article.author.id}) }}" 
-                      class="text-decoration-none">{{ article.author.fullname }}</a>
-                le {{ article.publishedAt|date('d/m/Y à H:i') }}
+            <div class="metadata mb-4">
+                <small>
+                    Par {{ article.author.fullname }} 
+                    le {{ article.publishedAt|date('d/m/Y') }}
+                </small>
             </div>
-            <div class="mb-3">
-                {% for section in article.sections %}
-                    <a href="{{ path('app_section', {slug: section.sectionSlug}) }}" 
-                       class="badge bg-secondary text-decoration-none">
-                        {{ section.sectionTitle }}
-                    </a>
-                {% endfor %}
+            
+            <div class="content">
+                {{ article.text|nl2br }}
             </div>
-        </header>
+        </article>
 
-        <div class="article-content">
-            {{ article.text|nl2br }}
-        </div>
+        <section id="comments" class="mt-5">
+            <h2>Commentaires</h2>
 
-        {% if is_granted('ROLE_ADMIN') %}
-            <div class="mt-4">
-                <a href="{{ path('admin_article_edit', {id: article.id}) }}" 
-                   class="btn btn-warning">Éditer</a>
-            </div>
-        {% endif %}
-    </article>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {{ form_start(commentForm) }}
+                    {{ form_widget(commentForm.content, {
+                        'attr': {
+                            'class': 'form-control mb-3',
+                            'placeholder': 'Votre commentaire...'
+                        }
+                    }) }}
+                    <button type="submit" class="btn btn-primary">Commenter</button>
+                {{ form_end(commentForm) }}
+            {% else %}
+                <p>
+                    <a href="{{ path('app_login') }}">Connectez-vous</a> ou 
+                    <a href="{{ path('app_register') }}">inscrivez-vous</a> 
+                    pour laisser un commentaire.
+                </p>
+            {% endif %}
 
-    <div class="related-articles mt-5">
-        <h3>Articles similaires</h3>
-        <div class="row">
-            {% for relatedArticle in relatedArticles %}
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
+            <div class="comments-list mt-4">
+                {% for comment in article.comments %}
+                    <div class="comment card mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <a href="{{ path('app_article', {slug: relatedArticle.titleSlug}) }}" 
-                                   class="text-decoration-none">
-                                    {{ relatedArticle.title }}
-                                </a>
-                            </h5>
-                            <p class="card-text small">
-                                {{ relatedArticle.text|excerpt(100) }}
-                            </p>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">{{ comment.author.fullname }}</h5>
+                                <small class="text-muted">
+                                    {{ comment.createdAt|date('d/m/Y H:i') }}
+                                </small>
+                            </div>
+                            <p class="card-text">{{ comment.content|nl2br }}</p>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% else %}
+                    <p>Aucun commentaire pour le moment.</p>
+                {% endfor %}
+            </div>
+        </section>
     </div>
 {% endblock %} 
