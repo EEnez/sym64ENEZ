@@ -1,44 +1,42 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">SYM-ENEZ</a>
+        <a class="navbar-brand" href="{{ path('app_home') }}">Blog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                
-                {% set sections = get_all_sections() %}
-                {% if sections is empty %}
+                {% for section in sections %}
                     <li class="nav-item">
-                        <span class="nav-link">No sections found</span>
+                        <a class="nav-link" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                            {{ section.sectionTitle }}
+                        </a>
                     </li>
-                {% else %}
-                    {% for section in sections %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
-                                {{ section.sectionTitle }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                {% endif %}
+                {% endfor %}
             </ul>
+
             <ul class="navbar-nav">
-                {% if app.user %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
-                            <a class="nav-link {% if app.request.get('_route') starts with 'admin_' %}active{% endif %}" 
-                               href="{{ path('admin_dashboard') }}">Administration</a>
+                            <a class="nav-link" href="{{ path('admin_dashboard') }}">Administration</a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_REDAC') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('redac_dashboard') }}">Espace rédacteur</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">
-                            Logout ({{ app.user.username }})
-                        </a>
+                        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link {% if app.request.get('_route') == 'app_login' %}active{% endif %}" 
-                           href="{{ path('app_login') }}">Login</a>
+                        <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
                     </li>
                 {% endif %}
             </ul>
