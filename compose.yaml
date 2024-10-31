@@ -1,3 +1,5 @@
+version: '3.1'
+
 services:
   nginx:
     image: nginx:alpine
@@ -20,6 +22,21 @@ services:
     networks:
       - symfony_network
 
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8090:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=database
+      - PMA_PASSWORD=enez
+      - PMA_USER=symenez
+    depends_on:
+      - database
+    networks:
+      - symfony_network
+
   database:
     image: mysql:8.0
     environment:
@@ -29,17 +46,6 @@ services:
       MYSQL_ROOT_PASSWORD: enez
     volumes:
       - database_data:/var/lib/mysql:rw
-    networks:
-      - symfony_network
-
-  mailer:
-    image: axllent/mailpit
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-    environment:
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
       - symfony_network
 
