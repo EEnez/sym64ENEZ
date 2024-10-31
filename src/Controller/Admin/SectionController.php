@@ -72,11 +72,17 @@ class SectionController extends AbstractController
     #[Route('/{id}', name: 'admin_section_delete', methods: ['POST'])]
     public function delete(Request $request, Section $section, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
         if ($this->isCsrfTokenValid('delete'.$section->getId(), $request->request->get('_token'))) {
+            // Check if section has articles
+            if (!$section->getArticles()->isEmpty()) {
+                $this->addFlash('error', 'Impossible de supprimer une section contenant des articles.');
+                return $this->redirectToRoute('admin_dashboard');
+            }
+            
             $entityManager->remove($section);
             $entityManager->flush();
+            
+            $this->addFlash('success', 'Section supprimée avec succès.');
         }
 
         return $this->redirectToRoute('admin_dashboard');

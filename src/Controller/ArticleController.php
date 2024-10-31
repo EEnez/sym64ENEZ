@@ -48,4 +48,29 @@ class ArticleController extends AbstractController
             'commentForm' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/article/new", name="article_new", methods={"GET","POST"})
+     */
+    public function new(Request $request): Response
+    {
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Ensure slug is set
+            if (empty($article->getTitleSlug())) {
+                $article->setTitleSlug($article->getTitle());
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('article_index');
+        }
+
+        // ... rest of the code
+    }
 } 

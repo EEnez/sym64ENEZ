@@ -8,9 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Section;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class Article
 {
     #[ORM\Id]
@@ -69,9 +70,10 @@ class Article
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+        $this->setTitleSlug($title);
         return $this;
     }
 
@@ -80,9 +82,12 @@ class Article
         return $this->titleSlug;
     }
 
-    public function setTitleSlug(string $titleSlug): static
+    public function setTitleSlug(?string $title): self
     {
-        $this->titleSlug = $titleSlug;
+        if ($title) {
+            $slugger = new AsciiSlugger();
+            $this->titleSlug = strtolower($slugger->slug($title));
+        }
         return $this;
     }
 
@@ -219,5 +224,23 @@ class Article
         }
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updateTimestamps(): void
+    {
+        if ($this->getCreatedAt() === null) {
+            $this->setCreatedAt(new \DateTimeImmutable());
+        }
+        
+        $this->setUpdatedAt(new \DateTimeImmutable());
+        
+        // Ensure slug is set
+        if (empty($this->titleSlug) && !empty($this->title)) {
+            $this->setTitleSlug($this->title);
+        }
     }
 }
