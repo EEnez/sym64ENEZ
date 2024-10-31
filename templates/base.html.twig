@@ -534,6 +534,346 @@
                 color: var(--text-primary);
                 margin-bottom: 0.5rem;
             }
+            
+            
+            .sticky-top {
+                position: sticky;
+                top: 0;
+                z-index: 1020;
+                backdrop-filter: blur(10px);
+            }
+            
+            
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: calc(1.375rem + 1.5vw);
+                }
+                
+                .display-4 {
+                    font-size: calc(1.275rem + 2.7vw);
+                }
+                
+                .article-content {
+                    font-size: 1rem;
+                }
+                
+                .card-title {
+                    font-size: 1.25rem;
+                }
+            }
+            
+            
+            @media (max-width: 576px) {
+                .container {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+                
+                .card {
+                    margin-bottom: 1rem;
+                }
+                
+                .section-header {
+                    margin-bottom: 2rem;
+                }
+                
+                .btn {
+                    padding: 0.4rem 1rem;
+                }
+                
+                .metadata {
+                    flex-direction: column;
+                    align-items: flex-start !important;
+                }
+                
+                .metadata img {
+                    margin-bottom: 0.5rem;
+                }
+            }
+            
+            
+            @media (max-width: 768px) {
+                .table-responsive {
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                .table td, .table th {
+                    padding: 0.5rem;
+                }
+                
+                .btn-sm {
+                    padding: 0.25rem 0.5rem;
+                }
+            }
+            
+            
+            @media (max-width: 576px) {
+                .form-control {
+                    padding: 0.5rem 0.75rem;
+                }
+                
+                .form-check-input {
+                    margin-top: 0.2rem;
+                }
+            }
+            
+            
+            @media (max-width: 768px) {
+                /* Article cards */
+                .article-card {
+                    margin-bottom: 1.5rem;
+                }
+                
+                
+                .display-4 {
+                    font-size: 2rem;
+                }
+                
+                
+                .table-responsive {
+                    border-radius: var(--card-border-radius);
+                }
+                
+                .table td {
+                    white-space: nowrap;
+                }
+                
+                
+                .metadata {
+                    flex-wrap: wrap;
+                }
+                
+                .metadata small {
+                    width: 100%;
+                    margin-top: 0.5rem;
+                }
+            }
+            
+            
+            @media (max-width: 576px) {
+                /* Container padding */
+                .container {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+                
+                
+                .article-content {
+                    font-size: 1rem;
+                    padding: 0.5rem;
+                }
+                
+                
+                .btn-group-sm > .btn {
+                    padding: 0.25rem 0.5rem;
+                    font-size: 0.75rem;
+                }
+                
+                
+                .card {
+                    margin-bottom: 1rem;
+                }
+                
+                .card-body {
+                    padding: 1rem;
+                }
+                
+                
+                .navbar-brand {
+                    font-size: 1.25rem;
+                }
+                
+                .nav-link {
+                    padding: 0.5rem 0.75rem;
+                }
+                
+                /* Headings */
+                h1 {
+                    font-size: 1.75rem;
+                }
+                
+                .display-4 {
+                    font-size: 1.75rem;
+                }
+            }
+            
+            
+            .table-responsive {
+                border-radius: var(--card-border-radius);
+                box-shadow: var(--card-shadow);
+                background: white;
+            }
+            
+            .table thead {
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+            
+            
+            .admin-actions {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+            
+           
+            .admin-form {
+                background: white;
+                padding: 2rem;
+                border-radius: var(--card-border-radius);
+                box-shadow: var(--card-shadow);
+            }
+            
+            .form-check-input:checked {
+                background-color: var(--accent-color);
+                border-color: var(--accent-color);
+            }
+            
+           
+            @media (max-width: 992px) {
+                .table-responsive {
+                    overflow-x: auto;
+                }
+                
+                .table td {
+                    min-width: 120px;
+                    white-space: nowrap;
+                }
+                
+                td:last-child {
+                    min-width: 150px;
+                }
+                
+                .admin-actions {
+                    flex-direction: column;
+                    gap: 0.25rem;
+                }
+                
+                .btn-sm {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+            
+            
+            @media (max-width: 768px) {
+                .admin-form {
+                    padding: 1rem;
+                }
+                
+                .form-check-label {
+                    font-size: 0.9rem;
+                }
+                
+                .col-md-4 {
+                    margin-bottom: 0.5rem;
+                }
+            }
+            
+            
+            .admin-container {
+                background: white;
+                border-radius: var(--card-border-radius);
+                box-shadow: var(--card-shadow);
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .admin-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .admin-actions {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .table-responsive {
+                margin: 0 -1rem;
+                padding: 0 1rem;
+                overflow-x: auto;
+            }
+            
+            .table th {
+                white-space: nowrap;
+                background: var(--light-bg);
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+            
+            .table td {
+                vertical-align: middle;
+            }
+            
+            .action-column {
+                min-width: 200px;
+                white-space: nowrap;
+            }
+            
+            
+            @media (max-width: 768px) {
+                .admin-container {
+                    padding: 1rem;
+                }
+                
+                .admin-header {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                
+                .admin-actions {
+                    flex-direction: column;
+                }
+                
+                .admin-actions .btn {
+                    width: 100%;
+                    text-align: center;
+                }
+                
+                .table td {
+                    min-width: 120px;
+                }
+                
+                .btn-group {
+                    flex-direction: column;
+                    width: 100%;
+                }
+                
+                .btn-group .btn {
+                    width: 100%;
+                    margin: 0.25rem 0;
+                    border-radius: var(--button-border-radius) !important;
+                }
+                
+                dl.row {
+                    margin: 0;
+                }
+                
+                dt.col-sm-3, dd.col-sm-9 {
+                    padding: 0.5rem 0;
+                }
+            }
+            
+            
+            .form-control, .form-select {
+                padding: 0.75rem;
+                border: 2px solid var(--border-color);
+                border-radius: var(--button-border-radius);
+            }
+            
+            .form-check-input:checked {
+                background-color: var(--accent-color);
+                border-color: var(--accent-color);
+            }
         </style>
     </head>
     <body>
