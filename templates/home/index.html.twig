@@ -3,30 +3,50 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Derniers articles</h1>
-    
-    {% for article in articles %}
-        <article class="mb-4">
-            <h2>{{ article.title }}</h2>
-            <div class="metadata">
-                <small>
-                    Par <a href="{{ path('app_author', {id: article.author.id}) }}" 
-                          class="text-decoration-none">{{ article.author.fullname }}</a>
-                    le {{ article.publishedAt|date('F j, Y') }}
-                    {% if article.sections|length > 0 %}
-                        dans
-                        {% for section in article.sections %}
-                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}"
-                               class="text-decoration-none">{{ section.sectionTitle }}</a>
-                            {%- if not loop.last %}, {% endif -%}
-                        {% endfor %}
-                    {% endif %}
-                </small>
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4 fw-bold text-center mb-5">Derniers articles</h1>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for article in articles %}
+            <div class="col-md-6">
+                <article class="card h-100 border-0 shadow-sm article-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h2 class="h4 card-title article-title">
+                                <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                                   class="text-decoration-none text-dark">{{ article.title }}</a>
+                            </h2>
+                            {% if article.sections|length > 0 %}
+                                <div>
+                                    {% for section in article.sections %}
+                                        <span class="badge bg-primary">{{ section.sectionTitle }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="metadata mb-3 d-flex align-items-center">
+                            <img src="https://ui-avatars.com/api/?name={{ article.author.fullname|url_encode }}&background=random" 
+                                 class="rounded-circle me-2" width="32" height="32" alt="{{ article.author.fullname }}">
+                            <small class="text-muted">
+                                Par <a href="{{ path('app_author', {id: article.author.id}) }}" 
+                                      class="text-decoration-none">{{ article.author.fullname }}</a>
+                                le {{ article.publishedAt|date('d F Y') }}
+                            </small>
+                        </div>
+                        
+                        <p class="card-text text-muted">{{ article.text|excerpt(200) }}</p>
+                        
+                        <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                           class="btn btn-outline-primary">
+                            Lire la suite <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </article>
             </div>
-            <p>{{ article.text|excerpt(300) }}</p>
-            <a href="{{ path('app_article', {slug: article.titleSlug}) }}" class="btn btn-primary">
-                Lire la suite
-            </a>
-        </article>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %} 

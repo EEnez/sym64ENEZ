@@ -36,7 +36,7 @@ class Article
     #[ORM\Column(type: 'boolean')]
     private bool $published = false;
 
-    #[ORM\ManyToMany(targetEntity: Section::class)]
+    #[ORM\ManyToMany(targetEntity: Section::class, inversedBy: 'articles')]
     #[ORM\JoinTable(name: 'article_section')]
     private Collection $sections;
 

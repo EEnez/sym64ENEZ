@@ -17,7 +17,9 @@ class CommentType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Votre commentaire...',
-                    'rows' => 4
+                    'rows' => 4,
+                    'class' => 'form-control'
+                    
                 ]
             ])
         ;

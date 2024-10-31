@@ -1,6 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-secondary mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 2px 15px rgba(43, 65, 98, 0.1);">
     <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">SYM-ENEZ</a>
+        <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">
+            <i class="fas fa-newspaper me-2"></i>SYM-ENEZ
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,7 +11,7 @@
             <ul class="navbar-nav me-auto">
                 {% for section in sections %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
+                        <a class="nav-link px-3" href="{{ path('app_section', {slug: section.sectionSlug}) }}">
                             {{ section.sectionTitle }}
                         </a>
                     </li>
@@ -20,23 +22,33 @@
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_dashboard') }}">Administration</a>
+                            <a class="nav-link" href="{{ path('admin_dashboard') }}">
+                                <i class="fas fa-cog me-1"></i>Administration
+                            </a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_REDAC') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('redac_dashboard') }}">Espace rédacteur</a>
+                            <a class="nav-link" href="{{ path('redac_dashboard') }}">
+                                <i class="fas fa-edit me-1"></i>Espace rédacteur
+                            </a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+                        </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+                        <a class="nav-link" href="{{ path('app_register') }}">
+                            <i class="fas fa-user-plus me-1"></i>Inscription
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="nav-link" href="{{ path('app_login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Connexion
+                        </a>
                     </li>
                 {% endif %}
             </ul>

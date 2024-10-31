@@ -21,7 +21,7 @@ class TwigGlobalSubscriber implements EventSubscriberInterface
 
     public function onKernelController(ControllerEvent $event): void
     {
-        // Ajouter les sections comme variable globale Twig
+      
         $this->twig->addGlobal('sections', $this->sectionRepository->findAll());
     }
 

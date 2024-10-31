@@ -4,39 +4,54 @@
 
 {% block body %}
     <div class="container">
-        <article class="mb-5">
+        <article>
             <h1>{{ article.title }}</h1>
             <div class="metadata mb-4">
                 <small>
-                    Par {{ article.author.fullname }} 
+                    Par <a href="{{ path('app_author', {id: article.author.id}) }}" 
+                          class="text-decoration-none">{{ article.author.fullname }}</a>
                     le {{ article.publishedAt|date('d/m/Y') }}
+                    {% if article.sections|length > 0 %}
+                        dans
+                        {% for section in article.sections %}
+                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}"
+                               class="text-decoration-none">{{ section.sectionTitle }}</a>
+                            {%- if not loop.last %}, {% endif -%}
+                        {% endfor %}
+                    {% endif %}
                 </small>
             </div>
-            
-            <div class="content">
+            <div class="article-content mb-5">
                 {{ article.text|nl2br }}
             </div>
         </article>
 
-        <section id="comments" class="mt-5">
-            <h2>Commentaires</h2>
-
+        <section class="comments">
+            <h2 class="mb-4">Commentaires</h2>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {{ form_start(commentForm) }}
-                    {{ form_widget(commentForm.content, {
-                        'attr': {
-                            'class': 'form-control mb-3',
-                            'placeholder': 'Votre commentaire...'
-                        }
-                    }) }}
-                    <button type="submit" class="btn btn-primary">Commenter</button>
-                {{ form_end(commentForm) }}
+                <div class="comment-form">
+                    {{ form_start(commentForm) }}
+                        <div class="mb-3">
+                            {{ form_widget(commentForm, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Écrivez votre commentaire ici...',
+                                    'rows': 5
+                                }
+                            }) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-2"></i>Publier le commentaire
+                        </button>
+                    {{ form_end(commentForm) }}
+                </div>
             {% else %}
-                <p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
                     <a href="{{ path('app_login') }}">Connectez-vous</a> ou 
                     <a href="{{ path('app_register') }}">inscrivez-vous</a> 
                     pour laisser un commentaire.
-                </p>
+                </div>
             {% endif %}
 
             <div class="comments-list mt-4">
@@ -52,29 +67,11 @@
                                     <small class="text-muted">
                                         {{ comment.createdAt|date('d/m/Y H:i') }}
                                     </small>
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <div class="btn-group btn-group-sm ms-2">
-                                            <a href="{{ path('admin_comment_edit', {id: comment.id}) }}" 
-                                               class="btn btn-warning">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form method="post" action="{{ path('admin_comment_delete', {id: comment.id}) }}" 
-                                                  class="d-inline" 
-                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-                                                <button class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    {% endif %}
                                 </div>
                             </div>
-                            <p class="card-text">{{ comment.content|nl2br }}</p>
+                            <p class="card-text">{{ comment.content }}</p>
                         </div>
                     </div>
-                {% else %}
-                    <p>Aucun commentaire pour le moment.</p>
                 {% endfor %}
             </div>
         </section>

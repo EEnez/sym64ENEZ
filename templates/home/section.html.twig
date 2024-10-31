@@ -3,35 +3,51 @@
 {% block title %}{{ section.sectionTitle }}{% endblock %}
 
 {% block body %}
-    <h1>{{ section.sectionTitle }}</h1>
-    
-    {% if section.sectionDetail %}
-        <div class="section-detail mb-4">
-            {{ section.sectionDetail }}
-        </div>
-    {% endif %}
-    
-    {% for article in articles %}
-        <article class="mb-4">
-            <h2>{{ article.title }}</h2>
-            <div class="metadata">
-                <small>
-                    By {{ article.author.fullname }} on {{ article.publishedAt|date('F j, Y') }}
-                    {% if article.sections|length > 0 %}
-                        in
-                        {% for section in article.sections %}
-                            <a href="{{ path('app_section', {slug: section.sectionSlug}) }}">
-                                {{ section.sectionTitle }}
-                            </a>
-                            {%- if not loop.last %}, {% endif -%}
-                        {% endfor %}
-                    {% endif %}
-                </small>
+    <div class="section-header text-center mb-5">
+        <h1 class="display-4 fw-bold">{{ section.sectionTitle }}</h1>
+        {% if section.sectionDetail %}
+            <div class="section-detail lead text-muted mt-3">
+                {{ section.sectionDetail }}
             </div>
-            <p>{{ article.text|excerpt(200) }}</p>
-            <a href="{{ path('app_article', {slug: article.titleSlug}) }}" class="btn btn-primary">
-                Lire la suite
-            </a>
-        </article>
-    {% endfor %}
+        {% endif %}
+    </div>
+    
+    <div class="row g-4">
+        {% for article in articles %}
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h4 mb-3">
+                            <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                               class="text-decoration-none text-dark">{{ article.title }}</a>
+                        </h2>
+                        
+                        <div class="metadata mb-3 d-flex align-items-center">
+                            <img src="https://ui-avatars.com/api/?name={{ article.author.fullname|url_encode }}&background=random" 
+                                 class="rounded-circle me-2" width="32" height="32" alt="{{ article.author.fullname }}">
+                            <small class="text-muted">
+                                Par <a href="{{ path('app_author', {id: article.author.id}) }}" 
+                                      class="text-decoration-none">{{ article.author.fullname }}</a>
+                                le {{ article.publishedAt|date('d/m/Y') }}
+                            </small>
+                        </div>
+                        
+                        <p class="card-text text-muted">{{ article.text|excerpt(200) }}</p>
+                        
+                        <a href="{{ path('app_article', {slug: article.titleSlug}) }}" 
+                           class="btn btn-sm btn-outline-primary">
+                            Lire la suite <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Aucun article dans cette section pour le moment.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %} 

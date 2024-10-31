@@ -63,9 +63,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class)]
+    private Collection $articles;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->articles = new ArrayCollection();
         $this->roles = ['ROLE_USER'];
         $this->isVerified = false;
     }
@@ -235,5 +239,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->verificationTokenExpiresAt = $verificationTokenExpiresAt;
         return $this;
+    }
+
+    public function getArticles(): Collection
+    {
+        return $this->articles;
     }
 }
