@@ -35,7 +35,10 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --optimize-autoloader
 
 # Configuration des permissions
-RUN chown -R www-data:www-data var 
+RUN chown -R www-data:www-data var \
+    && chmod -R 777 var \
+    && mkdir -p var/cache var/log \
+    && chmod -R 777 var/cache var/log
 
 # Installation de MySQL
 RUN apk add --no-cache mysql-client \
