@@ -32,6 +32,7 @@ class RegistrationController extends AbstractController
             $user->setPassword($hashedPassword);
             $user->setRoles(['ROLE_USER']);
             $user->setIsActive(true);
+            $user->setUniqid(uniqid('user_', true));
             
             $entityManager->persist($user);
             $entityManager->flush();
