@@ -10,7 +10,7 @@ RUN apk add --no-cache \
 
 # Installation des extensions PHP
 RUN docker-php-ext-install \
-    pdo_pgsql \
+    pdo_mysql \
     zip \
     intl
 
