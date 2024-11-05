@@ -426,6 +426,7 @@
                 "pdo",
                 "pgsql",
                 "postgresql",
+                "mysql",
                 "queryobject",
                 "sasql",
                 "sql",

@@ -21,6 +21,8 @@ services:
       - database
     networks:
       - symfony_network
+    environment:
+      DATABASE_URL: "mysql://symenez:enez@database:3306/sym64enez?serverVersion=8.0.32&charset=utf8mb4"
 
   phpmyadmin:
     image: phpmyadmin
