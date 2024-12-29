@@ -1,0 +1,44 @@
+<div class="card">
+    {% if article.image %}
+        <img src="{{ asset('uploads/articles/' ~ article.image) }}" class="card-img-top" alt="{{ article.title }}">
+    {% else %}
+        <div class="card-img-placeholder">
+            <i class="fas fa-newspaper"></i>
+        </div>
+    {% endif %}
+    
+    <div class="card-body">
+        <div class="card-categories">
+            {% for section in article.sections %}
+                <span class="badge badge-{{ section.sectionTitle|lower }}">
+                    <i class="fas fa-tag"></i>
+                    {{ section.sectionTitle }}
+                </span>
+            {% endfor %}
+        </div>
+
+        <h5 class="card-title">
+            <a href="{{ path('app_article_show', {'slug': article.titleSlug}) }}">
+                {{ article.title }}
+            </a>
+        </h5>
+
+        <p class="card-text">{{ article.text|striptags|slice(0, 120) }}...</p>
+
+        <div class="card-meta">
+            <span class="author">
+                <i class="fas fa-user-circle me-1"></i>
+                <a href="#">{{ article.author.username }}</a>
+            </span>
+            <span class="date">
+                <i class="far fa-clock me-1"></i>
+                {{ article.createdAt|date('d/m/Y') }}
+            </span>
+        </div>
+
+        <a href="{{ path('app_article_show', {'slug': article.titleSlug}) }}" class="btn-read-more">
+            Lire plus
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</div> 

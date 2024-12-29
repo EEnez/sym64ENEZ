@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block navigation %}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+        }
+        .admin-nav {
+            background: var(--gradient-primary);
+        }
+        .admin-nav .nav-link {
+            color: rgba(255,255,255,.8);
+            transition: all 0.3s ease;
+        }
+        .admin-nav .nav-link:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .admin-nav .navbar-brand {
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-expand-lg admin-nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('admin_dashboard') }}">Administration</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="adminNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_article_index') }}">
+                            <i class="fas fa-newspaper me-1"></i>Articles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_section_index') }}">
+                            <i class="fas fa-folder me-1"></i>Sections
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_comment_index') }}">
+                            <i class="fas fa-comments me-1"></i>Commentaires
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_user_index') }}">
+                            <i class="fas fa-users me-1"></i>Utilisateurs
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_home') }}">
+                            <i class="fas fa-home me-1"></i>Retour au site
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid py-4">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %} 
