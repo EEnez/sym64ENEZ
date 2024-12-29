@@ -14,6 +14,16 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin/article')]
 class ArticleController extends AbstractController
 {
+    #[Route('/', name: 'admin_article_index', methods: ['GET'])]
+    public function index(ArticleRepository $articleRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        return $this->render('admin/article/index.html.twig', [
+            'articles' => $articleRepository->findBy([], ['createdAt' => 'DESC'])
+        ]);
+    }
+
     #[Route('/new', name: 'admin_article_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -29,15 +39,15 @@ class ArticleController extends AbstractController
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_dashboard');
+            return $this->redirectToRoute('admin_article_index');
         }
 
         return $this->render('admin/article/new.html.twig', [
-            'form' => $form
+            'form' => $form->createView()
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'admin_article_edit')]
+    #[Route('/{id}/edit', name: 'admin_article_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -47,11 +57,21 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('admin_dashboard');
+            return $this->redirectToRoute('admin_article_index');
         }
 
         return $this->render('admin/article/edit.html.twig', [
-            'form' => $form,
+            'article' => $article,
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/{id}', name: 'admin_article_show', methods: ['GET'])]
+    public function show(Article $article): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        return $this->render('admin/article/show.html.twig', [
             'article' => $article
         ]);
     }
@@ -66,16 +86,6 @@ class ArticleController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_dashboard');
-    }
-
-    #[Route('/{id}', name: 'admin_article_show', methods: ['GET'])]
-    public function show(Article $article): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
-        return $this->render('admin/article/show.html.twig', [
-            'article' => $article
-        ]);
+        return $this->redirectToRoute('admin_article_index');
     }
 } 

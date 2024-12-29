@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,30 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
+    #[Route('/articles', name: 'app_article_index')]
+    public function index(
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
+        $query = $entityManager->getRepository(Article::class)
+            ->createQueryBuilder('a')
+            ->where('a.published = :published')
+            ->setParameter('published', true)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery();
+
+        $articles = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            12
+        );
+
+        return $this->render('article/index.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
+
     #[Route('/article/{slug}', name: 'app_article')]
     public function show(
         string $slug,

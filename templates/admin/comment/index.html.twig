@@ -1,0 +1,72 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des commentaires{% endblock %}
+
+{% block body %}
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Gestion des commentaires</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-comments me-1"></i>
+                Liste des commentaires
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Auteur</th>
+                            <th>Article</th>
+                            <th>Contenu</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in comments %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('app_author', {id: comment.author.id}) }}" 
+                                       class="text-decoration-none">
+                                        {{ comment.author.fullname }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('app_article', {slug: comment.article.titleSlug}) }}" 
+                                       class="text-decoration-none">
+                                        {{ comment.article.title }}
+                                    </a>
+                                </td>
+                                <td>{{ comment.content|slice(0, 100) ~ (comment.content|length > 100 ? '...' : '') }}</td>
+                                <td>{{ comment.createdAt|date('d/m/Y H:i') }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ path('admin_comment_edit', {id: comment.id}) }}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ path('admin_comment_delete', {id: comment.id}) }}" 
+                                              method="post" 
+                                              class="d-inline" 
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+                                            <input type="hidden" 
+                                                   name="_token" 
+                                                   value="{{ csrf_token('delete' ~ comment.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="navigation">
+                    {{ knp_pagination_render(comments) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

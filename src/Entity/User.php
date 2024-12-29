@@ -46,32 +46,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email]
     private ?string $email = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $activate = false;
-
-    private bool $isActive = false;
+    #[ORM\Column(name: 'activate', type: 'boolean')]
+    private bool $isActive = true;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $verificationToken = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $verificationTokenExpiresAt = null;
-
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
-    private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class)]
     private Collection $articles;
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
         $this->articles = new ArrayCollection();
-        $this->roles = ['ROLE_USER'];
-        $this->isVerified = false;
+        $this->uniqid = uniqid();
     }
 
     public function getId(): ?int
@@ -98,7 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
 
     /**
@@ -128,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -146,7 +139,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     public function getFullname(): ?string
@@ -185,26 +177,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isActivate(): bool
-    {
-        return $this->activate;
-    }
-
-    public function setActivate(bool $activate): static
-    {
-        $this->activate = $activate;
-
-        return $this;
-    }
-
     public function isActive(): bool
     {
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): self
+    public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
         return $this;
     }
 
@@ -213,9 +194,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): self
+    public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
         return $this;
     }
 
@@ -224,9 +206,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->verificationToken;
     }
 
-    public function setVerificationToken(?string $verificationToken): self
+    public function setVerificationToken(?string $verificationToken): static
     {
         $this->verificationToken = $verificationToken;
+
         return $this;
     }
 
@@ -235,12 +218,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->verificationTokenExpiresAt;
     }
 
-    public function setVerificationTokenExpiresAt(?\DateTimeInterface $verificationTokenExpiresAt): self
+    public function setVerificationTokenExpiresAt(?\DateTimeInterface $verificationTokenExpiresAt): static
     {
         $this->verificationTokenExpiresAt = $verificationTokenExpiresAt;
+
         return $this;
     }
 
+    /**
+     * @return Collection<int, Article>
+     */
     public function getArticles(): Collection
     {
         return $this->articles;

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+    <div class="container-xl py-4">
+        <h1 class="mb-4">Nos Articles</h1>
+        
+        <div class="articles-grid">
+            {% for article in articles %}
+                {% include 'article/_card.html.twig' with {'article': article} %}
+            {% else %}
+                <div class="text-center py-5">
+                    <p class="text-muted">Aucun article n'est disponible pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if articles.haveToPaginate is defined and articles.haveToPaginate %}
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(articles) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %} 
